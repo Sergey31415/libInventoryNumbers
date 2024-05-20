@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block main %}
+    <h4>Управление инвентарными номерами для книги <i>{{ book }}</i></h4>
+    <hr>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active p-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Добавить инвентарные номера</button>
+    <button class="nav-link p-3 text-danger" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Удалить инвентарные номера</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane active border p-5" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <form method="" action="" class="mb-5">
+            {% csrf_token %}
+            <div class="row">
+                <h5>Добавление инвентарных номеров: </h5>
+                <p>(укажите начальный и конечный номер, диапазон загрузится автоматически)</p>
+                <div class="col">
+                    <input type="text" name="start_range" id="start_range" class="form-control" placeholder="начало диапазона" >
+                     <div id="start_range_feedback" class="invalid-feedback"></div>
+                </div>
+                <div class="col">
+                    <input type="text" name="end_range" id="end_range" class="form-control" placeholder="конец диапазона">
+                    <div id="end_range_feedback" class="invalid-feedback"></div>
+                </div>
+                <div class="col">
+                    <button id="check-inv-nums" class="btn btn-primary">Проверить</button>
+                    <button id="submit-inv-nums" class="btn btn-primary hidden">Добавить</button>
+                </div>
+
+            </div>
+        </form>
+
+        <div id="alert-place">
+
+        </div>
+
+        {{ start_range }}
+        <br>
+        {{ end_range }}
+
+
+        {% for item in text %}
+        <h5>Уже существует: {{ item }}</h5>
+        {% endfor %}
+  </div>
+  <div class="tab-pane border p-5" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+      <div class="p-5">df</div>
+  </div>
+</div>
+
+<hr>
+    <h5>Текущая книга, содержит следущие инвентарные номера: </h5>
+    <div class="border p-5 inventory_number_list_container">
+        <div id="inventory_number_list"></div>
+        <button id="refresh-button" class="btn border-0 bg-transparent"><img src="https://cdn-icons-png.flaticon.com/512/93/93638.png" width="50" id="rotating-image"></button><br><br>
+    </div>
+
+
+    {% include 'inventory_number_management/ajax_page_actions.html' %}
+
+    <style>
+        .inventory_number_list_container {
+            position: relative;
+        }
+        #inventory_number_list button {
+            margin: 5px;
+        }
+
+        #refresh-button {
+            position: absolute;
+            right: 5px;
+        }
+
+
+        /* Определяем анимацию */
+        @keyframes rotate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Применяем анимацию к изображению */
+        #rotating-image {
+          transition: transform 0.3s ease-in-out;
+        }
+
+        /* Определяем класс для вращения изображения */
+        .rotate {
+          animation: rotate 2s linear;
+
+
+        /* Анимация для исчезновения сообщения о добавлении инв номеров*/
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+          }
+        }
+
+        .fadeOut {
+          animation-name: fadeOut;
+          animation-duration: 1s; /* Продолжительность анимации */
+          animation-fill-mode: forwards; /* Сохранить стиль после окончания анимации */
+        }
+}
+
+    </style>
+
+{% endblock %}

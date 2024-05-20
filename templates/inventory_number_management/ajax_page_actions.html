@@ -1,0 +1,110 @@
+<script>
+
+   const id_book = {{ book.id_book }}
+
+   document.addEventListener('DOMContentLoaded', function() {
+       let validationInventoryIsUnique = false;
+
+       {% include 'inventory_number_management/ajax_partials/get_inventory_number_list.js' %}
+       {% include 'inventory_number_management/ajax_partials/add_inventory_number.js' %}
+       {% include 'inventory_number_management/ajax_partials/check_inventory_number_exists.js' %}
+
+       get_inventory_numbers(id_book);  // показываем список инв. номеров
+
+       // кнопка сохранения
+       document.getElementById('submit-inv-nums').addEventListener('click', function(event) {
+           event.preventDefault(); // Предотвращаем действие по умолчанию (отправку формы)
+            let isValid = validateInventoryNumberForm();
+            if (isValid) {
+               check_inventory_number_exists();
+               addInventory(id_book);   // Добавляем инв. номер
+            }
+
+           
+        });
+
+       // кнопка обновления
+        document.getElementById('refresh-button').addEventListener('click', function() {
+            document.getElementById('rotating-image').classList.toggle('rotate');
+            get_inventory_numbers(id_book);
+        });
+
+        // ввод инв. номера
+       document.getElementById('start_range').addEventListener('input', function(event) {
+           showCheckButton();
+       });
+       // ввод инв. номера
+       document.getElementById('end_range').addEventListener('input', function(event) {
+           showCheckButton();
+       });
+       
+       // кнопка проверить
+        document.getElementById('check-inv-nums').addEventListener('click', function(event) {
+            event.preventDefault();
+            let isValid = validateInventoryNumberForm();
+            if (isValid) {
+               check_inventory_number_exists();
+            }
+
+        });
+
+   });
+   
+   
+   function validateInventoryNumberForm() {
+        let start_range = document.getElementById('start_range');
+        let end_range =  document.getElementById('end_range');
+        let start_range_feedback = document.getElementById('start_range_feedback');
+        let end_range_feedback =  document.getElementById('end_range_feedback');
+        
+        let startValue = start_range.value;
+            let endValue = end_range.value;
+            
+            // Reset feedback and styles
+            start_range.classList.remove('is-invalid');
+            end_range.classList.remove('is-invalid');
+            start_range_feedback.style.display = 'none';
+            end_range_feedback.style.display = 'none';
+            
+            let isValid = true;
+            
+            if (!/^\d+$/.test(startValue)) {
+                start_range_feedback.textContent = 'Начало диапазона должно быть числом.';
+                start_range_feedback.style.display = 'block';
+                start_range.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                isValid = true;
+                start_range.classList.add('is-valid');
+            }
+            
+            if (!/^\d+$/.test(endValue)) {
+                end_range_feedback.textContent = 'Конец диапазона должен быть числом.';
+                end_range_feedback.style.display = 'block';
+                end_range.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                isValid = true;
+                end_range.classList.add('is-valid');
+            }
+            
+            if (isValid && parseInt(startValue) >= parseInt(endValue)) {
+                end_range_feedback.textContent = 'Конец диапазона должен быть больше начала диапазона.';
+                end_range_feedback.style.display = 'block';
+                end_range.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                isValid = true;
+                end_range.classList.add('is-valid');
+            }
+            
+           let isValidFirst = /^\d+$/.test(startValue);
+           let isValidSecond = /^\d+$/.test(endValue) && parseInt(startValue) < parseInt(endValue);
+           
+           return isValidFirst && isValidSecond;
+   }
+
+
+</script>
+
+

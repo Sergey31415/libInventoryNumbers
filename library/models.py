@@ -48,7 +48,7 @@ class Section(models.Model):  # разделы
 
 class Inv(models.Model):  # инвентарный номер
     id_in = models.AutoField(primary_key=True)
-    num = models.CharField(max_length=70)
+    num = models.CharField(max_length=70, unique=True)
 
     def __str__(self):
         return f'{self.num}'
