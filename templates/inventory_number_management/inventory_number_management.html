@@ -9,40 +9,85 @@
   </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane active border p-5" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <form method="" action="" class="mb-5">
-            {% csrf_token %}
-            <div class="row">
-                <h5>Добавление инвентарных номеров: </h5>
-                <p>(укажите начальный и конечный номер, диапазон загрузится автоматически)</p>
-                <div class="col">
-                    <input type="text" name="start_range" id="start_range" class="form-control" placeholder="начало диапазона" >
-                     <div id="start_range_feedback" class="invalid-feedback"></div>
-                </div>
-                <div class="col">
-                    <input type="text" name="end_range" id="end_range" class="form-control" placeholder="конец диапазона">
-                    <div id="end_range_feedback" class="invalid-feedback"></div>
-                </div>
-                <div class="col">
-                    <button id="check-inv-nums" class="btn btn-primary">Проверить</button>
-                    <button id="submit-inv-nums" class="btn btn-primary hidden">Добавить</button>
-                </div>
+  <div class="tab-pane active border pt-5" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
-            </div>
-        </form>
 
-        <div id="alert-place">
+   <div class="d-flex align-items-start ">
+
+      <div class="nav flex-column nav-pills me-5 ms-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <button class="btn btn-outline-info" id="v-pills-first-tab" data-bs-toggle="pill" data-bs-target="#v-pills-first" type="button" role="tab" aria-controls="v-pills-first" aria-selected="false"><img src="https://adam.edu.kg/media/uploads/2024/05/20/lay.png" width="25"></button>
+        <button class="btn btn-outline-info active" id="v-pills-second-tab" data-bs-toggle="pill" data-bs-target="#v-pills-second" type="button" role="tab" aria-controls="v-pills-second" aria-selected="true"><img src="https://adam.edu.kg/media/uploads/2024/05/20/lays.png" width="25`"></button>
+      </div>
+
+      <div class="tab-content " id="v-pills-tabContent" >
+
+        <div class="tab-pane " id="v-pills-first" role="tabpanel" aria-labelledby="v-pills-first-tab">
+            <!-- start content section -->
+               <form method="" action="" class="mb-5">
+                    {% csrf_token %}
+                    <div class="row">
+                        <h5>Добавление инвентарного номера: </h5>
+                        <p>(введите инвентарный номер)</p>
+                        <div class="col">
+                            <input type="text" name="start_range" id="number" class="form-control" placeholder="начало диапазона" >
+                             <div id="start_range_feedback2" class="invalid-feedback"></div>
+                        </div>
+                        <div class="col">
+                            <button id="check-inv-nums2" class="btn btn-primary">Проверить</button>
+                            <button id="submit-inv-nums2" class="btn btn-primary hidden">Добавить</button>
+                        </div>
+
+                    </div>
+                </form>
+                <div id="alert-place2"></div>
+                {{ start_range }}
+                <br>
+                {{ end_range }}
+
+                {% for item in text2 %}
+                <h5>Уже существует: {{ item }}</h5>
+                {% endfor %}
+            <!-- end content section -->
+        </div>
+
+        <div class="tab-pane active" id="v-pills-second" role="tabpanel" aria-labelledby="v-pills-second-tab">
+            <!-- start content section -->
+                <form method="" action="" class="mb-5">
+                    {% csrf_token %}
+                    <div class="row">
+                        <h5>Добавление инвентарных номеров: </h5>
+                        <p>(укажите начальный и конечный номер, диапазон загрузится автоматически)</p>
+                        <div class="col">
+                            <input type="text" name="start_range" id="start_range" class="form-control" placeholder="начало диапазона" >
+                             <div id="start_range_feedback" class="invalid-feedback"></div>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="end_range" id="end_range" class="form-control" placeholder="конец диапазона">
+                            <div id="end_range_feedback" class="invalid-feedback"></div>
+                        </div>
+                        <div class="col">
+                            <button id="check-inv-nums" class="btn btn-primary">Проверить</button>
+                            <button id="submit-inv-nums" class="btn btn-primary hidden">Добавить</button>
+                        </div>
+
+                    </div>
+                </form>
+                <div id="alert-place"></div>
+                {{ start_range }}
+                <br>
+                {{ end_range }}
+
+                {% for item in text %}
+                <h5>Уже существует: {{ item }}</h5>
+                {% endfor %}
+            <!-- end content section -->
 
         </div>
 
-        {{ start_range }}
-        <br>
-        {{ end_range }}
+      </div>
+    </div>
 
 
-        {% for item in text %}
-        <h5>Уже существует: {{ item }}</h5>
-        {% endfor %}
   </div>
   <div class="tab-pane border p-5" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
       <div class="p-5">df</div>
