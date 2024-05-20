@@ -45,12 +45,16 @@ def add_inventory_number(request, book_id):
 
             rangeNumbers = range(int(start_range), int(end_range) + 1)
 
-            existing_inventories = (Inv.objects.filter(num__in=rangeNumbers))
-            if not existing_inventories.exists():
+            # Получаем из базы инв. номера, которые уже существуют в таблице Inv (просто существующие и привязанные к книге)
+            existing_inventories = Inv.objects.filter(num__in=rangeNumbers).values_list('num', flat=True)
+
+            # Получаем список инвентарных номеров, которые привязаны к книге
+            binded_inventory_numbers = Book.objects.filter(inv__in=existing_inventories).values_list('inv__num', flat=True)
+
+            if not binded_inventory_numbers.exists():
                 book = Book.objects.get(id_book=book_id)
                 for number in rangeNumbers:
-                    inv = Inv(num=number)
-                    inv.save()
+                    inv, created = Inv.objects.get_or_create(num=number)
                     book.inv.add(inv)
 
             return JsonResponse({'success': True, 'inventory_number': list(rangeNumbers)})
@@ -67,10 +71,13 @@ def check_inventory_number_exists(request):
         end_range = data.get('endRange')
         rangeNumbers = range(int(start_range), int(end_range) + 1)
 
-        # Проверка наличия хотя бы одного инвентарного номера из диапазона в базе данных
-        existing_inventories = Inv.objects.filter(num__in=rangeNumbers).values_list('num', flat=True)
+        # Получаем из базы инв. номера, которые уже существуют в таблице Inv (просто существующие и привязанные к книге)
+        existing_inventories = Inv.objects.filter(num__in=rangeNumbers)
 
-        return JsonResponse(list(existing_inventories), safe=False)
+        # Получаем список инвентарных номеров, которые привязаны к книге
+        binded_inventory_numbers = Book.objects.filter(inv__in=existing_inventories).values_list('inv__num', flat=True)
+
+        return JsonResponse(list(binded_inventory_numbers), safe=False)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
