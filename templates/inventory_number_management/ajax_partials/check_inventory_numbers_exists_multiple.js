@@ -1,9 +1,9 @@
-function check_inventory_number_exists() {
+function check_inventory_numbers_exists_multiple() {
     const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
     let startRange = document.getElementById('start_range').value;
     let endRange = document.getElementById('end_range').value;
 
-    fetch('/check_inventory_number_exists/', {
+    fetch('/check_inventory_numbers_exists_multiple/', {
         method: 'POST',
         headers: {
            'Content-Type': 'application/json',

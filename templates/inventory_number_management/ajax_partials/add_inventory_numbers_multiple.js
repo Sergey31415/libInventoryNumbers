@@ -3,7 +3,7 @@ function addInventory(id_book) {
     let startRange = document.getElementById('start_range').value;
     let endRange = document.getElementById('end_range').value;
 
-    fetch('/add_inventory_number/' + id_book + '/', {
+    fetch('/add_inventory_numbers_multiple/' + id_book + '/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

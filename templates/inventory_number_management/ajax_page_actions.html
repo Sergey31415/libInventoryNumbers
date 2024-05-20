@@ -6,8 +6,8 @@
        let validationInventoryIsUnique = false;
 
        {% include 'inventory_number_management/ajax_partials/get_inventory_number_list.js' %}
-       {% include 'inventory_number_management/ajax_partials/add_inventory_number.js' %}
-       {% include 'inventory_number_management/ajax_partials/check_inventory_number_exists.js' %}
+       {% include 'inventory_number_management/ajax_partials/add_inventory_numbers_multiple.js' %}
+       {% include 'inventory_number_management/ajax_partials/check_inventory_numbers_exists_multiple.js' %}
 
        get_inventory_numbers(id_book);  // показываем список инв. номеров
 
@@ -16,7 +16,7 @@
            event.preventDefault(); // Предотвращаем действие по умолчанию (отправку формы)
             let isValid = validateInventoryNumberForm();
             if (isValid) {
-               check_inventory_number_exists();
+               check_inventory_numbers_exists_multiple();
                addInventory(id_book);   // Добавляем инв. номер
             }
 
@@ -43,7 +43,7 @@
             event.preventDefault();
             let isValid = validateInventoryNumberForm();
             if (isValid) {
-               check_inventory_number_exists();
+               check_inventory_numbers_exists_multiple();
             }
 
         });
