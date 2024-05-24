@@ -2,6 +2,7 @@ from django.utils import timezone
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from simple_history.models import HistoricalRecords, HistoricalChanges
 
 
 COVERS = (
@@ -98,10 +99,20 @@ class Book(models.Model):
     online_copy = models.FileField(upload_to='books/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()  # новое поле
 
     def __str__(self):
-        authors = ', '.join([str(author) for author in self.author.all()])
-        return f'"{self.title}" - {authors}'
+        fields = {
+            'Название': self.title,
+            'Автор(ы)': ', '.join([str(author) for author in self.author.all()]) if self.author.exists() else None,
+            'ISBN': self.isbn,
+            'Полная информация о книге': 'Да' if self.data_full else None,
+        }
+
+        # Формируем строку с информацией о книге, пропуская пустые значения
+        book_info = ', '.join([f'{field}: {value}' for field, value in fields.items() if value is not None])
+        return book_info
+
 
     def save(self, *args, **kwargs):
         if self.online_copy.name:
@@ -112,3 +123,14 @@ class Book(models.Model):
 
             # Call the original save method to save the file
         super(Book, self).save(*args, **kwargs)
+
+
+class Poll(models.Model):
+    question = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+    published = models.BooleanField(default="False")
+    history = HistoricalRecords() # новое поле
+
+    def __str__(self):
+        return self.question
+

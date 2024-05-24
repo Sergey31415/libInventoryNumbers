@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 
-from library.models import Book, Inv, Author
+from library.models import Book, Inv, Author, Poll
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 
 
@@ -82,49 +82,22 @@ def check_inventory_number_exists(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
-""" 
+def test(request):
+    # Получите объект Poll
+    poll = Book.objects.get(id_book=3)
 
-    if request.method == 'POST':
-        start_range = int(request.POST.get('start_range'))
-        end_range = int(request.POST.get('end_range'))
-        rangeNumbers = range(start_range, end_range + 1)
-
-        existing_inventories = (Inv.objects.filter(num__in=rangeNumbers))
-
-        if not existing_inventories.exists():
-            for number in rangeNumbers:
-                inv = Inv(num=number)
-                inv.save()
-                book.inv.add(inv)
+    # Получите историю изменений
+    #history =poll.history.all() # poll.history.first() #
 
 
-def inventory_number_management(request, pk):
-    start_range = ''
-    end_range = ''
-    book = Book.objects.get(id_book=pk)
-    existing_inventories = None
+    # этот блок показывает историю изменений (в консоль)
+    first = poll.history.first()
+    last = poll.history.last()
+    delta = first.diff_against(last)
+    for change in delta.changes:
+        print(f"'{change.field}' changed from '{change.old}' to '{change.new}'")
 
-    if request.method == 'POST':
-        start_range = int(request.POST.get('start_range'))
-        end_range = int(request.POST.get('end_range'))
-        rangeNumbers = range(start_range, end_range + 1)
-
-        existing_inventories = (Inv.objects.filter(num__in=rangeNumbers))
-
-        if not existing_inventories.exists():
-            for number in rangeNumbers:
-                inv = Inv(num=number)
-                inv.save()
-                book.inv.add(inv)
+    all_books_history = Book.history.all()
 
 
-    context = {
-        'start_range': start_range,
-        'end_range': end_range,
-        'book': book,
-        'text': existing_inventories,
-    }
-    return render(request, 'index.html', context)
-
-
-"""
+    return render(request, 'test.html', {'history': delta})
